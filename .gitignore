@@ -24,3 +24,11 @@
 /nbdist/
 /.nb-gradle/
 /build/
+#account-service/src/test/
+#auth-service/src/
+#config/src/test/
+#gateway/src/test/
+#monitor/src/test/
+#order-service/src/test/
+#registry/src/test/
+#zipkin/src/test/
