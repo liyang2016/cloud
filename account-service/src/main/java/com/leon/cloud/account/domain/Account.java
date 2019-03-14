@@ -1,5 +1,6 @@
 package com.leon.cloud.account.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +18,7 @@ import java.util.Date;
 @ToString
 @Table(name = "user_info")
 @Entity
+@Data
 public class Account {
 
     @Id
