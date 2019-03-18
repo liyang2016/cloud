@@ -1,0 +1,12 @@
+###spring profiles
+>1. Mapped "{[/{name}-{profiles}.properties],methods=[GET]}"
+>2. Mapped "{[/{name}-{profiles}.yml || /{name}-{profiles}.yaml],methods=[GET]}"
+>3. Mapped "{[/{name}/{profiles}/{label:.*}],methods=[GET]}"
+>4. Mapped "{[/{name}/{profiles:.*[^-].*}],methods=[GET]}"
+>5. Mapped "{[/{label}/{name}-{profiles}.yml || /{label}/{name}-{profiles}.yaml],methods=[GET]}"
+>6. Mapped "{[/{name}-{profiles}.json],methods=[GET]}"
+>7. Mapped "{[/{label}/{name}-{profiles}.json],methods=[GET]}"
+>8. Mapped "{[/{label}/{name}-{profiles}.properties],methods=[GET]}"
+>9. Mapped "{[/{name}/{profile}/**],methods=[GET],params=[useDefaultLabel]}"
+>10. Mapped "{[/{name}/{profile}/{label}/**],methods=[GET]}"
+>11. Mapped "{[/{name}/{profile}/{label}/**],methods=[GET],produces=[application/octet-stream]}"

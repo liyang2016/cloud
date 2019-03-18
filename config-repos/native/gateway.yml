@@ -19,7 +19,7 @@ zuul:
         sensitiveHeaders:
 spring:
   zipkin:
-      base-url: http://localhost:9994
+      base-url: http://zipkin:9994
   sleuth:
       sampler:
           probability: 1.0
