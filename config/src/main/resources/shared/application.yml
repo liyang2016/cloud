@@ -11,4 +11,4 @@ eureka:
        management.context-path: ${server.servlet.context-path:}
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://registry:8761/eureka/
