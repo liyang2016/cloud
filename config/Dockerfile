@@ -5,4 +5,4 @@ ADD ./target/config.jar /app/
 
 EXPOSE 8888
 
-ENTRYPOINT ["java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-jar","/app/config.jar"]
+ENTRYPOINT ["java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=docker","-jar","/app/config.jar"]

@@ -5,4 +5,4 @@ ADD ./target/registry.jar /app/
 
 EXPOSE 8761
 
-ENTRYPOINT ["java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-jar","/app/registry.jar"]
+ENTRYPOINT ["java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=docker","-jar","/app/registry.jar"]
