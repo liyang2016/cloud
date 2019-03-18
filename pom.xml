@@ -115,6 +115,7 @@
 		<module>monitor</module>
 		<module>zipkin</module>
 		<module>cloud-common</module>
+		<module>serial-service</module>
 	</modules>
 
 </project>
