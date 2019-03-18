@@ -1,0 +1,14 @@
+eureka:
+  instance:
+    prefer-ip-address: true
+    health-check-url: http://localhost:${server.port}${server.servlet.context-path:}/actuator/health
+    status-page-url: http://localhost:${server.port}${server.servlet.context-path:}/actuator/info
+    home-page-url: http://localhost:${server.port}${server.servlet.context-path:}
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
+    metadata-map:
+       configPath: ${server.servlet.context-path:}
+       management.context-path: ${server.servlet.context-path:}
+  client:
+    serviceUrl:
+      defaultZone: http://registry:8761/eureka/
