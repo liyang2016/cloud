@@ -1,11 +1,11 @@
 server:
   servlet:
-    context-path: /accounts
-  port: 6000
+    context-path: /orders
+  port: 6006
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/auth
+    url: jdbc:mysql://mysql:3306/auth
     type: com.alibaba.druid.pool.DruidDataSource
     username: root
     password: root
@@ -54,17 +54,16 @@ spring:
       ddl-auto: update
     show-sql: true
   zipkin:
-    base-url: http://localhost:9994
+      base-url: http://zipkin:9994
   sleuth:
       sampler:
-        probability: 1.0
+          probability: 1.0
 feign:
   hystrix:
     enabled: true
 info:
   app:
-    name: account-instance
-
+    name: order-instance
 management:
   endpoints:
     web:

@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/liyang2016/cloud/
+          username: '{cipher}fc63c017baa7f9aad5e97bffc79e6af1851a5745823fbd2efeee0b81411b9cbb'
+          password: '{cipher}cbc6324cd5e69ccea77d9f4b682fb93232b8205d6c13e938cf9467c25fb6bcfe'
+          search-paths: config-repos
+      label: native
+  security:
+    user:
+      password: ${CONFIG_SERVICE_PASSWORD}
+      name: user
+  application:
+    name: config
+server:
+  port: 8888

@@ -1,2 +1,5 @@
 encrypt:
   key: cloud
+spring:
+  profiles:
+    active: native
