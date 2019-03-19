@@ -1,4 +1,4 @@
-###spring profiles
+### spring profiles
 >1. Mapped "{[/{name}-{profiles}.properties],methods=[GET]}"
 >2. Mapped "{[/{name}-{profiles}.yml || /{name}-{profiles}.yaml],methods=[GET]}"
 >3. Mapped "{[/{name}/{profiles}/{label:.*}],methods=[GET]}"

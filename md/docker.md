@@ -1,5 +1,5 @@
-##使用docker发布
-###逐一发布过程
+## 使用docker发布
+### 逐一发布过程
 ```shell
 #创建Docker镜像
 docker build -t cloud/config:0.0.1 .
@@ -23,7 +23,7 @@ docker exec -it cloud_mysql /bin/bash
 docker rm `docker ps -a -q`
 ```
 
-###统一发布
+### 统一发布
 ```shell
 #使用docker-compose编排 docker-compose.yml存在依赖问题，需要config实例完全启动
 docker-compose up
