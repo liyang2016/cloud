@@ -7,7 +7,6 @@ spring:
       fail-fast: true
       password: ${CONFIG_SERVICE_PASSWORD}
       username: user
-      label: prod
 
 eureka:
   instance:
