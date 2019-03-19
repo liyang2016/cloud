@@ -1,0 +1,5 @@
+server:
+  port: 8761
+eureka:
+  server:
+    enable-self-preservation: true

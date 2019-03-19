@@ -1,0 +1,25 @@
+server:
+  port: 8751
+zuul:
+  ignoredServices: '*'
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+
+  routes:
+    account-service:
+        path: /accounts/**
+        serviceId: account-service
+        stripPrefix: false
+        sensitiveHeaders:
+    order-service:
+        path: /orders/**
+        serviceId: order-service
+        stripPrefix: false
+        sensitiveHeaders:
+spring:
+  zipkin:
+      base-url: http://zipkin:9994
+  sleuth:
+      sampler:
+          probability: 1.0
