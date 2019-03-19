@@ -13,5 +13,3 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://registry:8761/eureka/
-
-${spring.cloud.client.ipAddress}:${server.port}
