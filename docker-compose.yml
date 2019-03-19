@@ -51,3 +51,34 @@ services:
         max-size: "10m"
         max-file: "10"
 
+  account-service_1:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/account-service:0.0.1
+    restart: always
+    depends_on:
+      - config
+      - registry
+      - zipkin
+    ports:
+      - 6000:6000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  account-service_2:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/account-service:0.0.1
+    restart: always
+    depends_on:
+      - config
+      - registry
+      - zipkin
+    ports:
+      - 6001:6000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
