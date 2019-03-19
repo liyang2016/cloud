@@ -4,6 +4,7 @@
 #创建Docker镜像
 docker build -t cloud/config:0.0.1 .
 docker build -t cloud/registry:0.0.1 .
+docker build -t cloud/zipkin:0.0.1 .
 
 #创建Docker容器
 docker run -d --name cloud_config cloud/config:0.0.1
