@@ -18,6 +18,9 @@ docker logs --tail=100 cloud_registry
 docker run -d --name=cloud_mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql:8.0.15
 docker run -d --name=cloud_mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306 mysql:5.7.25
 docker exec -it cloud_mysql /bin/bash
+
+
+docker rm `docker ps -a -q`
 ```
 
 ###统一发布
