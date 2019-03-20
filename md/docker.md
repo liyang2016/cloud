@@ -10,6 +10,7 @@ docker build -t cloud/zipkin:0.0.1 .
 docker run -d --name cloud_config cloud/config:0.0.1
 docker run -d --link=cloud_config:config --name cloud_registry -p 8761:8761 cloud/registry:0.0.1
 docker run -d --link=cloud_config:config --name cloud_zipkin --link=cloud_registry:registry -p 9994:9994 cloud/zipkin:0.0.1
+docker run -d --link=cloud_config:config --link=cloud_registry:registry --link=cloud_zipkin:zipkin --link=cloud_mysql:mysql --name=cloud_account_1 -p 6000:6000 cloud/account-service:0.0.1
 
 #查看日志
 docker logs --tail=100 cloud_registry
