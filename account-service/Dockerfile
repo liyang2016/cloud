@@ -7,4 +7,5 @@ COPY ../wait-for-it.sh /app/
 RUN chmod +x /app/wait-for-it.sh
 
 EXPOSE 6000
+
 ENTRYPOINT ["java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=docker","-jar","/app/account-service.jar"]
