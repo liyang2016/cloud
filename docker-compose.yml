@@ -35,6 +35,7 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
+    command: ["wait-for-it.sh", "config:8888", "--", "java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=docker","-jar","/app/registry.jar"]
 
   zipkin:
     environment:

@@ -2,6 +2,9 @@ FROM java:8-jre
 MAINTAINER Liyang <cp3leon@gmail.com>
 
 ADD ./target/zipkin.jar /app/
+COPY ../wait-for-it.sh /app/
+
+RUN chmod +x /app/wait-for-it.sh
 
 EXPOSE 8761
 
