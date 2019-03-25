@@ -16,7 +16,7 @@ eureka:
        management.context-path: ${server.servlet.context-path:}
   client:
     serviceUrl:
-      defaultZone: http://192.168.3.227:8761/eureka/
+      defaultZone: http://127.0.0.1:8761/eureka/
 
 spring:
   datasource:
