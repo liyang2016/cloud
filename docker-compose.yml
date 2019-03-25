@@ -35,51 +35,51 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-    command: ["wait-for-it.sh", "config:8888", "--", "java","-Xmx200m","-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=docker","-jar","/app/registry.jar"]
+    command: ["wait-for-it.sh", "config:8888", "--","startup.sh", "docker","registry"]
 
-  zipkin:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: cloud/zipkin:0.0.1
-    restart: always
-    depends_on:
-      - config
-      - registry
-    ports:
-      - 9994:9994
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  account-service_1:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: cloud/account-service:0.0.1
-    restart: always
-    depends_on:
-      - config
-      - registry
-      - zipkin
-    ports:
-      - 6000:6000
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
-
-  account-service_2:
-    environment:
-      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: cloud/account-service:0.0.1
-    restart: always
-    depends_on:
-      - config
-      - registry
-      - zipkin
-    ports:
-      - 6001:6000
-    logging:
-      options:
-        max-size: "10m"
-        max-file: "10"
+#  zipkin:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: cloud/zipkin:0.0.1
+#    restart: always
+#    depends_on:
+#      - config
+#      - registry
+#    ports:
+#      - 9994:9994
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
+#
+#  account-service_1:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: cloud/account-service:0.0.1
+#    restart: always
+#    depends_on:
+#      - config
+#      - registry
+#      - zipkin
+#    ports:
+#      - 6000:6000
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
+#
+#  account-service_2:
+#    environment:
+#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+#    image: cloud/account-service:0.0.1
+#    restart: always
+#    depends_on:
+#      - config
+#      - registry
+#      - zipkin
+#    ports:
+#      - 6001:6000
+#    logging:
+#      options:
+#        max-size: "10m"
+#        max-file: "10"
