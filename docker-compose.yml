@@ -35,7 +35,7 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-    command: ["wait-for-it.sh", "config:8888", "--","startup.sh", "docker","registry"]
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","registry"]
 
 #  zipkin:
 #    environment:
