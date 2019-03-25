@@ -10,4 +10,4 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 EXPOSE 8761
 
-ENTRYPOINT ["startup.sh","docker","registry"]
+#ENTRYPOINT ["startup.sh","docker","registry"]
