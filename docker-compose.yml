@@ -37,6 +37,20 @@ services:
         max-file: "10"
     command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","registry"]
 
+  gateway:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/gateway:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - "80:8751"
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","gateway"]
 #  zipkin:
 #    environment:
 #      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
