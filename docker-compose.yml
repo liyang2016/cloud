@@ -1,6 +1,6 @@
 version: '2.1'
 services:
-  cloud_mysql:
+  mysql:
     image: mysql:5.7.25
     restart: always
     ports:
@@ -28,9 +28,9 @@ services:
     image: cloud/registry:0.0.1
     restart: always
     depends_on:
-      - config
+      - "config"
     ports:
-      - 8761:8761
+      - "8761:8761"
     logging:
       options:
         max-size: "10m"
