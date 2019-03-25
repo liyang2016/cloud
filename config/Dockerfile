@@ -3,7 +3,8 @@ MAINTAINER Liyang <cp3leon@gmail.com>
 
 ADD ./target/config.jar /app/
 COPY ./startup.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/startup.sh
 
 EXPOSE 8888
 
-#ENTRYPOINT ["startup.sh","docker","config"]
+ENTRYPOINT ["startup.sh","docker","config"]
