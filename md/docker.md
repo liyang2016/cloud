@@ -27,5 +27,9 @@ docker rm `docker ps -a -q`
 ### 统一发布
 ```shell
 #使用docker-compose编排 docker-compose.yml存在依赖问题，需要config实例完全启动
-docker-compose up -e $CONFIG_SERVICE_PASSWORD=123456
+touch .env
+echo "CONFIG_SERVICE_PASSWORD=cloud" <  .env
+docker-compose up -d
 ```
+
+![docker-info](./img/dockerinfo.png)
