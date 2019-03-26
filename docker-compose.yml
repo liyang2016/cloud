@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   mysql:
-    image: mysql:5.7.25
+    image: cloud/mysql:0.0.1
     restart: always
     ports:
       - 3306:3306
@@ -51,49 +51,78 @@ services:
         max-size: "10m"
         max-file: "10"
     command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","gateway"]
-#  zipkin:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: cloud/zipkin:0.0.1
-#    restart: always
-#    depends_on:
-#      - config
-#      - registry
-#    ports:
-#      - 9994:9994
-#    logging:
-#      options:
-#        max-size: "10m"
-#        max-file: "10"
-#
-#  account-service_1:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: cloud/account-service:0.0.1
-#    restart: always
-#    depends_on:
-#      - config
-#      - registry
-#      - zipkin
-#    ports:
-#      - 6000:6000
-#    logging:
-#      options:
-#        max-size: "10m"
-#        max-file: "10"
-#
-#  account-service_2:
-#    environment:
-#      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-#    image: cloud/account-service:0.0.1
-#    restart: always
-#    depends_on:
-#      - config
-#      - registry
-#      - zipkin
-#    ports:
-#      - 6001:6000
-#    logging:
-#      options:
-#        max-size: "10m"
-#        max-file: "10"
+
+  zipkin:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/zipkin:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - 9994:9994
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","zipkin"]
+
+  account-service_1:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/account-service:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - 6000:6000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","account-service"]
+
+  account-service_2:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/account-service:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - 6001:6000
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","account-service"]
+
+  order-service_1:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/order-service:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - 6002:6005
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","order-service"]
+
+  order-service_2:
+    environment:
+      CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
+    image: cloud/order-service:0.0.1
+    restart: always
+    depends_on:
+      - "config"
+    ports:
+      - 6003:6005
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","order-service"]
