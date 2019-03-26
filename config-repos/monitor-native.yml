@@ -1,2 +1,11 @@
 server:
-  port: 11000
+  port: 9994
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    web:
+      server:
+        auto-time-requests: false

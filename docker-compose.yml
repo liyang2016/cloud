@@ -52,10 +52,10 @@ services:
         max-file: "10"
     command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","gateway"]
 
-  zipkin:
+  monitor:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: cloud/zipkin:0.0.1
+    image: cloud/monitor:0.0.1
     restart: always
     depends_on:
       - "config"
@@ -66,7 +66,7 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","zipkin"]
+    command: ["wait-for-it.sh", "config:8888/health/status", "--","startup.sh", "docker","monitor"]
 
   account-service_1:
     environment:

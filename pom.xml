@@ -113,7 +113,6 @@
 		<module>account-service</module>
 		<module>auth-service</module>
 		<module>monitor</module>
-		<module>zipkin</module>
 		<module>cloud-common</module>
 		<module>serial-service</module>
 	</modules>

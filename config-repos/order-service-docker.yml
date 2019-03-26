@@ -69,7 +69,7 @@ spring:
       ddl-auto: update
     show-sql: true
   zipkin:
-    base-url: http://zipkin:9994
+    base-url: http://monitor:9994
   sleuth:
     sampler:
       probability: 1.0
