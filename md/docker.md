@@ -1,7 +1,7 @@
 ## 使用docker发布
 ### 逐一发布过程
 ```shell
-#创建Docker镜像
+#创建Docker镜像 注意WINDOWS与LINUX换行符不同
 docker build -t cloud/config:0.0.1 .
 docker build -t cloud/registry:0.0.1 .
 docker build -t cloud/zipkin:0.0.1 .
