@@ -8,3 +8,6 @@
 *.gif binary
 *.png binary
 *.jpeg binary
+
+
+*.sh linguist-language=java
