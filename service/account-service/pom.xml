@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.leon</groupId>
-        <artifactId>cloud</artifactId>
+        <artifactId>service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>account-service</artifactId>
