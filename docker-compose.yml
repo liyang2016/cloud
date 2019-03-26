@@ -59,6 +59,7 @@ services:
     restart: always
     depends_on:
       - "config"
+      - "registry"
     ports:
       - 9994:9994
     logging:

@@ -171,8 +171,8 @@ CREATE TABLE `user_info` (
   `name` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
-  `create_date` date DEFAULT NULL,
-  `update_date` date DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
   `state` tinyint(2) NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
