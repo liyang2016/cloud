@@ -33,3 +33,12 @@ docker-compose up -d
 ```
 
 ![docker-info](./img/dockerinfo.png)
+
+
+### 根据docker-machine创建虚拟机
+```shell
+#node1
+docker-machine.exe -s "E:\dockerimg\hyper" create  -d hyperv --hyperv-virtual-switch node node1
+docker-machine.exe -s "E:\dockerimg\hyper" create  -d hyperv --hyperv-virtual-switch node node2
+docker-machine.exe -s "E:\dockerimg\hyper" create  -d hyperv --hyperv-virtual-switch node node3
+```
