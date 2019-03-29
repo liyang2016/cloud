@@ -92,5 +92,6 @@
         <module>account-service</module>
         <module>auth-service</module>
         <module>serial-service</module>
+        <module>audit-service</module>
     </modules>
 </project>

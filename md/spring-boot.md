@@ -10,3 +10,6 @@
 >9. Mapped "{[/{name}/{profile}/**],methods=[GET],params=[useDefaultLabel]}"
 >10. Mapped "{[/{name}/{profile}/{label}/**],methods=[GET]}"
 >11. Mapped "{[/{name}/{profile}/{label}/**],methods=[GET],produces=[application/octet-stream]}"
+
+### bean加载规则
+#### Autowired

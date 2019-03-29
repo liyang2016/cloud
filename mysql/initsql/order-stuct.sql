@@ -14,10 +14,10 @@ Date: 2019-03-26 11:23:23
 */
 
 -- CREATE database order
-DROP database IF EXISTS `order`;
-create database `order` default character set utf8 collate utf8_general_ci;
+DROP database IF EXISTS `ins_order`;
+create database `ins_order` default character set utf8 collate utf8_general_ci;
 -- change database
-use order;
+use ins_order;
 
 SET FOREIGN_KEY_CHECKS=0;
 
