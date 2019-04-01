@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.leon.cloud.audit.dao.CfgAuditMapper">
+    <resultMap id="cfgAudit" type="com.leon.cloud.audit.entity.CfgAuditEntity" autoMapping="true">
+        <id column="audit_id" jdbcType="BIGINT" 	property="auditId" />
+        <result column="audit_name" jdbcType="BIGINT" property="auditName"/>
+        <result column="process_id" jdbcType="BIGINT" property="processId"/>
+    </resultMap>
+    
+    <select id="getCfgAuditByAuditId" resultMap="cfgAudit" parameterType="java.lang.Long">
+          select audit_id,audit_name,process_id from cfg_audit where 1=1
+            <if test="auditId!=null and auditId!=''">
+                and audit_id=#{auditId}
+            </if>
+    </select>
+
+    <update id="updateModifyDate" parameterType="com.leon.cloud.audit.entity.CfgAuditEntity">
+        update cfg_audit
+        <set>
+            <if test="params.createDate != null and params.createDate != ''">
+                create_date = #{params.createDate},
+            </if>
+        </set>
+        WHERE
+        audit_id = #{params.auditId}
+    </update>
+</mapper>
+

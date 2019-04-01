@@ -18,8 +18,12 @@ import java.util.Date;
 @Log4j2
 @Service
 public class AccountServiceImpl implements AccountService{
+    private final AccountRepository repository;
+
     @Autowired
-    private AccountRepository repository;
+    public AccountServiceImpl(AccountRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Account findByName(String name) {
