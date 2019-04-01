@@ -18,8 +18,8 @@
     <update id="updateModifyDate" parameterType="com.leon.cloud.audit.entity.CfgAuditEntity">
         update cfg_audit
         <set>
-            <if test="params.createDate != null and params.createDate != ''">
-                create_date = #{params.createDate},
+            <if test="params.createDate != null">
+                create_date = #{params.createDate,jdbcType=TIMESTAMP}
             </if>
         </set>
         WHERE

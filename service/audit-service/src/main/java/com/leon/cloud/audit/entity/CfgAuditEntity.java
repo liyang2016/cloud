@@ -2,11 +2,13 @@ package com.leon.cloud.audit.entity;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
 
 @Data
+@EqualsAndHashCode
 @Accessors(chain = true)
 public class CfgAuditEntity {
 //`audit_id` bigint(20) unsigned NOT NULL COMMENT '唯一标识',
@@ -25,5 +27,6 @@ public class CfgAuditEntity {
     private String auditName;
     private Long processId;
     private Date createDate;
+
 
 }

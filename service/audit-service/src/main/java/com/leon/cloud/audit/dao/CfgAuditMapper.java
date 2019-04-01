@@ -9,5 +9,5 @@ import org.apache.ibatis.annotations.Param;
 public interface CfgAuditMapper {
     CfgAuditEntity getCfgAuditByAuditId(@Param("auditId")Long auditId);
 
-    CfgAuditEntity updateModifyDate(@Param("params")CfgAuditEntity cfgAuditEntity);
+    Integer updateModifyDate(@Param("params")CfgAuditEntity cfgAuditEntity);
 }
