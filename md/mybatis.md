@@ -313,6 +313,152 @@ public Object execute(SqlSession sqlSession, Object[] args) {
   }
 ```
 5. Executor执行
-DefaultSqlSession将数据库的具体JDBC操作交给Executor执行
-Executor种类
+DefaultSqlSession将数据库的增删改查JDBC操作交给Executor执行
+Executor类型
 ![mybatis-executor](./img/mybatis-executor.png)
+
+6. StatementHandler执行
+Executor由配置创建StatementHandler
+StatementHandler继承BaseStatementHandler抽象类
+![mybatis-statementHandler](./img/mybatis-statmenthandler.png)
+```java
+@Override
+  public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    Statement stmt = null;
+    try {
+      Configuration configuration = ms.getConfiguration();
+      //创建处理Handler
+      StatementHandler handler = configuration.newStatementHandler(wrapper, ms, parameter, rowBounds, resultHandler, boundSql);
+      stmt = prepareStatement(handler, ms.getStatementLog());
+      return handler.query(stmt, resultHandler);
+    } finally {
+      closeStatement(stmt);
+    }
+  }
+  
+  //BaseStatementHandler
+  protected BaseStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+      this.configuration = mappedStatement.getConfiguration();
+      this.executor = executor;
+      this.mappedStatement = mappedStatement;
+      this.rowBounds = rowBounds;
+  
+      this.typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+      this.objectFactory = configuration.getObjectFactory();
+  
+      if (boundSql == null) { // issue #435, get the key before calculating the statement
+        generateKeys(parameterObject);
+        boundSql = mappedStatement.getBoundSql(parameterObject);
+      }
+  
+      this.boundSql = boundSql;
+      //创建请求参数处理器
+      this.parameterHandler = configuration.newParameterHandler(mappedStatement, parameterObject, boundSql);
+      //创建返回值处理器
+      this.resultSetHandler = configuration.newResultSetHandler(executor, mappedStatement, rowBounds, parameterHandler, resultHandler, boundSql);
+    }
+    
+    //DefaultResultSetHandler
+    @Override
+      public List<Object> handleResultSets(Statement stmt) throws SQLException {
+        ErrorContext.instance().activity("handling results").object(mappedStatement.getId());
+    
+        final List<Object> multipleResults = new ArrayList<>();
+    
+        int resultSetCount = 0;
+        ResultSetWrapper rsw = getFirstResultSet(stmt);
+    
+        //获取xml文件中的resultMap块
+        List<ResultMap> resultMaps = mappedStatement.getResultMaps();
+        int resultMapCount = resultMaps.size();
+        validateResultMapsCount(rsw, resultMapCount);
+        while (rsw != null && resultMapCount > resultSetCount) {
+          ResultMap resultMap = resultMaps.get(resultSetCount);
+          //数据库返回结果与resultMaps对应解析
+          handleResultSet(rsw, resultMap, multipleResults, null);
+          rsw = getNextResultSet(stmt);
+          //清处处理完成的数据库返回结果集
+          cleanUpAfterHandlingResultSet();
+          resultSetCount++;
+        }
+    
+        //当前不存在resultMap，调用parentResultMap进行处理
+        String[] resultSets = mappedStatement.getResultSets();
+        if (resultSets != null) {
+          while (rsw != null && resultSetCount < resultSets.length) {
+            ResultMapping parentMapping = nextResultMaps.get(resultSets[resultSetCount]);
+            if (parentMapping != null) {
+              String nestedResultMapId = parentMapping.getNestedResultMapId();
+              ResultMap resultMap = configuration.getResultMap(nestedResultMapId);
+              handleResultSet(rsw, resultMap, null, parentMapping);
+            }
+            rsw = getNextResultSet(stmt);
+            cleanUpAfterHandlingResultSet();
+            resultSetCount++;
+          }
+        }
+    
+        return collapseSingleResultList(multipleResults);
+      }
+      
+private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Object> multipleResults, ResultMapping parentMapping) throws SQLException {
+    try {
+      if (parentMapping != null) {
+        handleRowValues(rsw, resultMap, null, RowBounds.DEFAULT, parentMapping);
+      } else {
+        if (resultHandler == null) {
+          DefaultResultHandler defaultResultHandler = new DefaultResultHandler(objectFactory);
+          handleRowValues(rsw, resultMap, defaultResultHandler, rowBounds, null);
+          multipleResults.add(defaultResultHandler.getResultList());
+        } else {
+          //最后由getRowValue执行结果集映射
+          handleRowValues(rsw, resultMap, resultHandler, rowBounds, null);
+        }
+      }
+    } finally {
+      // issue #228 (close resultsets)
+      closeResultSet(rsw.getResultSet());
+    }
+  }
+  
+  
+  private Object getRowValue(ResultSetWrapper rsw, ResultMap resultMap, String columnPrefix) throws SQLException {
+      final ResultLoaderMap lazyLoader = new ResultLoaderMap();
+      Object rowValue = createResultObject(rsw, resultMap, lazyLoader, columnPrefix);
+      if (rowValue != null && !hasTypeHandlerForResultObject(rsw, resultMap.getType())) {
+        final MetaObject metaObject = configuration.newMetaObject(rowValue);
+        boolean foundValues = this.useConstructorMappings;
+        if (shouldApplyAutomaticMappings(resultMap, false)) {
+          //结果集根据规则自动映射到字段
+          foundValues = applyAutomaticMappings(rsw, resultMap, metaObject, columnPrefix) || foundValues;
+        }
+        foundValues = applyPropertyMappings(rsw, resultMap, metaObject, lazyLoader, columnPrefix) || foundValues;
+        foundValues = lazyLoader.size() > 0 || foundValues;
+        rowValue = foundValues || configuration.isReturnInstanceForEmptyRow() ? rowValue : null;
+      }
+      return rowValue;
+    }
+    
+    
+  
+  private boolean applyAutomaticMappings(ResultSetWrapper rsw, ResultMap resultMap, MetaObject metaObject, String columnPrefix) throws SQLException {
+    //创建UnMappedColumnAutoMapping对象
+    List<UnMappedColumnAutoMapping> autoMapping = createAutomaticMappings(rsw, resultMap, metaObject, columnPrefix);
+    boolean foundValues = false;
+    if (!autoMapping.isEmpty()) {
+      for (UnMappedColumnAutoMapping mapping : autoMapping) {
+         //使用mybatis默认注册的TypeHandler进行数据库类型与JAVA类型转换 由TypeHandlerRegistry管理
+        final Object value = mapping.typeHandler.getResult(rsw.getResultSet(), mapping.column);
+        if (value != null) {
+          foundValues = true;
+        }
+        if (value != null || (configuration.isCallSettersOnNulls() && !mapping.primitive)) {
+          // gcode issue #377, call setter on nulls (value is not 'found')
+          metaObject.setValue(mapping.property, value);
+        }
+      }
+    }
+    return foundValues;
+  }
+```
+7. 缓存
