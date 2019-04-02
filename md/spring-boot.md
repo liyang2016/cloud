@@ -13,3 +13,6 @@
 
 ### bean加载规则
 #### Autowired
+根据类型查找合适的Bean
+#### Resource
+根据beanName从上下文中找到合适的Bean

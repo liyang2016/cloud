@@ -26,7 +26,7 @@ public class DataSourceConfiguration {
     private String maxWait;
 
 
-    @Bean(name = "dataSource")
+    @Bean
     public DruidDataSource dataSource(){
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driver);
