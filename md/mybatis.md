@@ -7,12 +7,72 @@ mybatis过程
 类org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
 项目启动时MybatisAutoConfiguration通过spring-boot的autoConfigure功能自动注册sqlSessionFactory与sqlSessionTemplate两个bean
 ![mybatis-autoconfigure](./img/mybatis-autoconfigure.png)
+```java
+  @Bean
+  @ConditionalOnMissingBean
+  public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+    SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
+    factory.setDataSource(dataSource);
+    factory.setVfs(SpringBootVFS.class);
+    //读取配置文件中配置的Mapper类目录
+    if (StringUtils.hasText(this.properties.getConfigLocation())) {
+      factory.setConfigLocation(this.resourceLoader.getResource(this.properties.getConfigLocation()));
+    }
+    applyConfiguration(factory);
+    if (this.properties.getConfigurationProperties() != null) {
+      factory.setConfigurationProperties(this.properties.getConfigurationProperties());
+    }
+    if (!ObjectUtils.isEmpty(this.interceptors)) {
+      factory.setPlugins(this.interceptors);
+    }
+    if (this.databaseIdProvider != null) {
+      factory.setDatabaseIdProvider(this.databaseIdProvider);
+    }
+    if (StringUtils.hasLength(this.properties.getTypeAliasesPackage())) {
+      factory.setTypeAliasesPackage(this.properties.getTypeAliasesPackage());
+    }
+    if (this.properties.getTypeAliasesSuperType() != null) {
+      factory.setTypeAliasesSuperType(this.properties.getTypeAliasesSuperType());
+    }
+    if (StringUtils.hasLength(this.properties.getTypeHandlersPackage())) {
+      factory.setTypeHandlersPackage(this.properties.getTypeHandlersPackage());
+    }
+    if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
+      factory.setMapperLocations(this.properties.resolveMapperLocations());
+    }
+
+    return factory.getObject();
+  }
+  
+  @Override
+  public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
+
+    if (!AutoConfigurationPackages.has(this.beanFactory)) {
+      logger.debug("Could not determine auto-configuration package, automatic mapper scanning disabled.");
+      return;
+    }
+
+    logger.debug("Searching for mappers annotated with @Mapper");
+
+    List<String> packages = AutoConfigurationPackages.get(this.beanFactory);
+    if (logger.isDebugEnabled()) {
+      packages.forEach(pkg -> logger.debug("Using auto-configuration base package '{}'", pkg));
+    }
+
+    ClassPathMapperScanner scanner = new ClassPathMapperScanner(registry);
+    if (this.resourceLoader != null) {
+      scanner.setResourceLoader(this.resourceLoader);
+    }
+    //扫描Mapper注解 添加Mapper
+    scanner.setAnnotationClass(Mapper.class);
+    scanner.registerFilters();
+    scanner.doScan(StringUtils.toStringArray(packages));
+ }
+```
 
 2. 创建DefaultSqlSessionFactory DefaultSqlSession
 SqlSessionFactoryBean加载mybatis的配置，创建生成DefaultSqlSessionFactory的sqlSessionFactory实例
 sqlSessionFactory为DefaultSqlSessionFactory实例
-
-3. 创建sqlSession
 SqlSessionTemplate继承SqlSession，并包含SqlSession的代理对象
 ```java
 public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType,
@@ -149,5 +209,110 @@ public abstract class TransactionSynchronizationManager {
 }
 ```
 
+3. 获取MapperProxy
+Mybatis通过Spring容器进行管理时，每次请求Spring都会使用SqlSessionTemplate创建SqlSession的代理类执行具体的数据库操作
+SqlSessionTemplate同时实现SqlSession接口
+```java
+//SqlSessionTemplate通过配置获取具体执行的MapperProxy对象
+@Override
+ public <T> T getMapper(Class<T> type) {
+   return getConfiguration().getMapper(type, this);
+}
+//Mybatis Configuration对象
+public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
+  return mapperRegistry.getMapper(type, sqlSession);
+}
+//MapperRegistry对象
+public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
+    //MapperProxy最终由MapperProxyFactory生成
+    final MapperProxyFactory<T> mapperProxyFactory = (MapperProxyFactory<T>) knownMappers.get(type);
+    if (mapperProxyFactory == null) {
+      throw new BindingException("Type " + type + " is not known to the MapperRegistry.");
+    }
+    try {
+      return mapperProxyFactory.newInstance(sqlSession);
+    } catch (Exception e) {
+      throw new BindingException("Error getting mapper instance. Cause: " + e, e);
+    }
+  }
+```
 
-
+4. MapperProxy执行过程
+MapperProxy将执行的具体操作交给MapperMethod
+```java
+@Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+      if (Object.class.equals(method.getDeclaringClass())) {
+        return method.invoke(this, args);
+      } else if (isDefaultMethod(method)) {
+        return invokeDefaultMethod(proxy, method, args);
+      }
+    } catch (Throwable t) {
+      throw ExceptionUtil.unwrapThrowable(t);
+    }
+    final MapperMethod mapperMethod = cachedMapperMethod(method);
+    return mapperMethod.execute(sqlSession, args);
+  }
+```
+MapperMethod再根据不同的操作类型调用SqlSession中的数据库操作方法
+```java
+public Object execute(SqlSession sqlSession, Object[] args) {
+    Object result;
+    switch (command.getType()) {
+       //插入
+      case INSERT: {
+    	Object param = method.convertArgsToSqlCommandParam(args);
+        result = rowCountResult(sqlSession.insert(command.getName(), param));
+        break;
+      }
+      //更新
+      case UPDATE: {
+        Object param = method.convertArgsToSqlCommandParam(args);
+        result = rowCountResult(sqlSession.update(command.getName(), param));
+        break;
+      }
+      //删除
+      case DELETE: {
+        Object param = method.convertArgsToSqlCommandParam(args);
+        result = rowCountResult(sqlSession.delete(command.getName(), param));
+        break;
+      }
+      //查询
+      case SELECT:
+        if (method.returnsVoid() && method.hasResultHandler()) {
+          executeWithResultHandler(sqlSession, args);
+          result = null;
+        } else if (method.returnsMany()) {
+          result = executeForMany(sqlSession, args);
+        } else if (method.returnsMap()) {
+          result = executeForMap(sqlSession, args);
+        } else if (method.returnsCursor()) {
+          result = executeForCursor(sqlSession, args);
+        } else {
+          Object param = method.convertArgsToSqlCommandParam(args);
+          result = sqlSession.selectOne(command.getName(), param);
+          if (method.returnsOptional() &&
+              (result == null || !method.getReturnType().equals(result.getClass()))) {
+            result = Optional.ofNullable(result);
+          }
+        }
+        break;
+       //批量处理
+      case FLUSH:
+        result = sqlSession.flushStatements();
+        break;
+      default:
+        throw new BindingException("Unknown execution method for: " + command.getName());
+    }
+    if (result == null && method.getReturnType().isPrimitive() && !method.returnsVoid()) {
+      throw new BindingException("Mapper method '" + command.getName()
+          + " attempted to return null from a method with a primitive return type (" + method.getReturnType() + ").");
+    }
+    return result;
+  }
+```
+5. Executor执行
+DefaultSqlSession将数据库的具体JDBC操作交给Executor执行
+Executor种类
+![mybatis-executor](./img/mybatis-executor.png)
