@@ -2,9 +2,16 @@
 ThreadPoolExecutor类
 
 ### 重要属性  
-ctl 包含线程池线程数量、状态信息
+ctl 高三位线程池状态信息、低29位保存线程池数量
 works 等待执行的任务集合
-
+corePoolSize 核心线程数
+maximumPoolSize 线程池中最多能创建的线程数
+threadFactory 创建线程的工厂
+queue  缓存任务的阻塞队列（有界 无界LinkedBlockingQueue）
+keepAliveTime 非核心线程失效时间
+线程数量变化过程：创建一个线程
+1. 线程池中线程数量小于核心线程数，创建线程
+2. 线程池中线程数量大于核心线程数，队列没满
 ### 常用线程池
 ```java
 /**

@@ -1,14 +1,15 @@
-### 执行流程
+### mybatis执行流程
 spring-boot、mybatis、druid分析一次查询请求过程
 
-mybatis过程
 核心组件类：SqlSession SqlSessionFactory Executor
-1. 自动配置创建sqlSessionFactory与sqlSessionTemplate
+#### 1. 自动配置创建sqlSessionFactory与sqlSessionTemplate
 类org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
 项目启动时MybatisAutoConfiguration通过spring-boot的autoConfigure功能自动注册sqlSessionFactory与sqlSessionTemplate两个bean
 ![mybatis-autoconfigure](./img/mybatis-autoconfigure.png)
+
 ```java
-  @Bean
+
+@Bean
   @ConditionalOnMissingBean
   public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
     SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
@@ -70,10 +71,11 @@ mybatis过程
  }
 ```
 
-2. 创建DefaultSqlSessionFactory DefaultSqlSession
+#### 2. 创建DefaultSqlSessionFactory DefaultSqlSession
 SqlSessionFactoryBean加载mybatis的配置，创建生成DefaultSqlSessionFactory的sqlSessionFactory实例
 sqlSessionFactory为DefaultSqlSessionFactory实例
 SqlSessionTemplate继承SqlSession，并包含SqlSession的代理对象
+
 ```java
 public SqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType,
       PersistenceExceptionTranslator exceptionTranslator) {
@@ -209,9 +211,10 @@ public abstract class TransactionSynchronizationManager {
 }
 ```
 
-3. 获取MapperProxy
+#### 3. 获取MapperProxy
 Mybatis通过Spring容器进行管理时，每次请求Spring都会使用SqlSessionTemplate创建SqlSession的代理类执行具体的数据库操作
 SqlSessionTemplate同时实现SqlSession接口
+
 ```java
 //SqlSessionTemplate通过配置获取具体执行的MapperProxy对象
 @Override
@@ -237,8 +240,9 @@ public <T> T getMapper(Class<T> type, SqlSession sqlSession) {
   }
 ```
 
-4. MapperProxy执行过程
+#### 4. MapperProxy执行过程
 MapperProxy将执行的具体操作交给MapperMethod
+
 ```java
 @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -312,15 +316,16 @@ public Object execute(SqlSession sqlSession, Object[] args) {
     return result;
   }
 ```
-5. Executor执行
+#### 5. Executor执行
 DefaultSqlSession将数据库的增删改查JDBC操作交给Executor执行
 Executor类型
 ![mybatis-executor](./img/mybatis-executor.png)
 
-6. StatementHandler执行
+#### 6. StatementHandler执行
 Executor由配置创建StatementHandler
 StatementHandler继承BaseStatementHandler抽象类
 ![mybatis-statementHandler](./img/mybatis-statmenthandler.png)
+
 ```java
 @Override
   public <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
@@ -461,4 +466,4 @@ private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Obj
     return foundValues;
   }
 ```
-7. 缓存
+#### 7. 缓存

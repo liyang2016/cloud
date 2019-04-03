@@ -16,3 +16,18 @@
 根据类型查找合适的Bean
 #### Resource
 根据beanName从上下文中找到合适的Bean
+
+### 设计模式
+#### 简单工厂
+BeanFactory
+#### 单例模式
+FactoryBean
+#### 单例
+#### 适配器
+AOP通知功能
+数据库连接驱动
+#### 包装器
+类名中还有Wrapper
+#### 观察者
+ApplicationListener EventPublishingRunListener
+#### 策略模式
