@@ -29,6 +29,7 @@
 		<joda.time.version>2.9.9</joda.time.version>
 		<guava.veriosn>27.0.1-jre</guava.veriosn>
 		<mybatis.starter.version>2.0.0</mybatis.starter.version>
+		<quartz.version>2.3.0</quartz.version>
 	</properties>
 
 	<dependencyManagement>
@@ -108,6 +109,18 @@
 				<artifactId>mybatis-spring-boot-starter</artifactId>
 				<version>${mybatis.starter.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.quartz-scheduler</groupId>
+				<artifactId>quartz</artifactId>
+				<version>${quartz.version}</version>
+			</dependency>
+
+			<!--<dependency>-->
+				<!--<groupId>org.quartz-scheduler</groupId>-->
+				<!--<artifactId>quartz-job</artifactId>-->
+				<!--<version>${quartz.version}</version>-->
+			<!--</dependency>-->
 		</dependencies>
 
 	</dependencyManagement>
