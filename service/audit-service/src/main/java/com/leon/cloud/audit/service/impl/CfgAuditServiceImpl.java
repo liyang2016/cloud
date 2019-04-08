@@ -20,27 +20,26 @@ public class CfgAuditServiceImpl implements ICfgAuditService {
     private CfgAuditMapper cfgAuditMapper;
 
 
-
     @Override
-    public CfgAuditEntity getCfgAuditByAuditId(Long auditId){
-        CfgAuditEntity cfgAuditEntity=new CfgAuditEntity();
-        try{
-            cfgAuditEntity=cfgAuditMapper.getCfgAuditByAuditId(auditId);
+    public CfgAuditEntity getCfgAuditByAuditId(Long auditId) {
+        CfgAuditEntity cfgAuditEntity = new CfgAuditEntity();
+        try {
+            cfgAuditEntity = cfgAuditMapper.getCfgAuditByAuditId(auditId);
 //            throw new Exception();
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
         return cfgAuditEntity;
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.DEFAULT,timeout=36000,rollbackFor=Exception.class)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
     public CfgAuditEntity updateModifyDate(CfgAuditEntity cfgAuditEntity) {
         //根据主键获取
-        CfgAuditEntity entity=cfgAuditMapper.getCfgAuditByAuditId(cfgAuditEntity.getAuditId());
+        CfgAuditEntity entity = cfgAuditMapper.getCfgAuditByAuditId(cfgAuditEntity.getAuditId());
         entity.setCreateDate(new Date());
         log.info(cfgAuditMapper.updateModifyDate(entity));
-        entity=cfgAuditMapper.getCfgAuditByAuditId(cfgAuditEntity.getAuditId());
+        entity = cfgAuditMapper.getCfgAuditByAuditId(cfgAuditEntity.getAuditId());
         return entity;
     }
 
