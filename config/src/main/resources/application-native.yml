@@ -8,7 +8,7 @@ spring:
           password: '{cipher}cbc6324cd5e69ccea77d9f4b682fb93232b8205d6c13e938cf9467c25fb6bcfe'
           search-paths: config-repos
         native:
-          search-locations: D:/code/pyjaor/cloud/config-repos
+          search-locations: file:/$PROJECT_DIR$/config-repos
         default-profile: native
   security:
     user:
