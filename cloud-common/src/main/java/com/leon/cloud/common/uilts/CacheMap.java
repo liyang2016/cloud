@@ -28,6 +28,7 @@ public class CacheMap {
 
     /**
      * 获取缓存
+     *
      * @param key
      * @return
      */
@@ -37,6 +38,7 @@ public class CacheMap {
 
     /**
      * 存入缓存
+     *
      * @param key
      * @param value
      */
@@ -48,6 +50,7 @@ public class CacheMap {
 
     /**
      * 移除缓存
+     *
      * @param key
      */
     public static void remove(String key) {
@@ -58,6 +61,7 @@ public class CacheMap {
 
     /**
      * 批量移除
+     *
      * @param keys
      */
     public static void removeAll(List<String> keys) {

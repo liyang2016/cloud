@@ -7,7 +7,7 @@ public class Main {
 
     public static void main(String[] args) {
         Shape shape = new Circle();
-        AbstractShape redAbstractShape = new RedAbstractShape(shape);
+        AbstractShape redAbstractShape = new RedShape(shape);
         redAbstractShape.draw();
     }
 }

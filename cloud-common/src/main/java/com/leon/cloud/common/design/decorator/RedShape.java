@@ -3,10 +3,10 @@ package com.leon.cloud.common.design.decorator;
 /**
  * Created by leon on 2019/1/3.
  */
-public class RedAbstractShape extends AbstractShape {
+public class RedShape extends AbstractShape {
 
 
-    public RedAbstractShape(Shape shape) {
+    public RedShape(Shape shape) {
         super(shape);
     }
 

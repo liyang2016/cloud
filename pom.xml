@@ -31,6 +31,7 @@
 		<mybatis.starter.version>2.0.0</mybatis.starter.version>
 		<quartz.version>2.3.0</quartz.version>
 		<apache.commons.version>3.3.2</apache.commons.version>
+		<apache.curator.version>4.2.0</apache.curator.version>
 	</properties>
 
 	<dependencyManagement>
@@ -122,12 +123,11 @@
 				<artifactId>commons-lang3</artifactId>
 				<version>${apache.commons.version}</version>
 			</dependency>
-
-			<!--<dependency>-->
-				<!--<groupId>org.quartz-scheduler</groupId>-->
-				<!--<artifactId>quartz-job</artifactId>-->
-				<!--<version>${quartz.version}</version>-->
-			<!--</dependency>-->
+			<dependency>
+				<groupId>org.apache.curator</groupId>
+				<artifactId>curator-framework</artifactId>
+				<version>${apache.curator.version}</version>
+			</dependency>
 		</dependencies>
 
 	</dependencyManagement>
