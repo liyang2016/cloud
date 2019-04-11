@@ -112,7 +112,7 @@ public class ZkClient {
 
     public static void main(String[] args) {
         try {
-            nodesList(getClient("127.0.0.1"), "/zookeeper");
+            nodesList(getClient("127.0.0.1","esop","asiainfo$123"), "/dubbo/org.apache.dubbo.demo.DemoService/providers");
         } catch (Exception e) {
             e.printStackTrace();
         }

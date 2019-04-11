@@ -1,0 +1,21 @@
+### dubbo注册中心数据
+节点名解析：
+dubbo://10.0.75.1:20880/org.apache.dubbo.demo.DemoService
+anyhost=true
+application=dubbo-demo-api-provider
+default.deprecated=false
+default.dynamic=false
+default.export=true
+default.register=true
+deprecated=false
+dubbo=2.0.2
+dynamic=false
+export=true
+generic=false
+interface=org.apache.dubbo.demo.DemoService
+methods=sayHello
+pid=8024
+register=true
+release=
+side=provider
+timestamp=1554859620977
