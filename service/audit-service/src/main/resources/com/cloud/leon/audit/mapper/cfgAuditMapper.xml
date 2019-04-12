@@ -6,10 +6,11 @@
         <id column="audit_id" jdbcType="BIGINT" 	property="auditId" />
         <result column="audit_name" jdbcType="BIGINT" property="auditName"/>
         <result column="process_id" jdbcType="BIGINT" property="processId"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
     </resultMap>
     
     <select id="getCfgAuditByAuditId" resultMap="cfgAudit" parameterType="java.lang.Long">
-          select audit_id,audit_name,process_id from cfg_audit where 1=1
+          select audit_id,audit_name,process_id,create_date from cfg_audit where 1=1
             <if test="auditId!=null and auditId!=''">
                 and audit_id=#{auditId}
             </if>

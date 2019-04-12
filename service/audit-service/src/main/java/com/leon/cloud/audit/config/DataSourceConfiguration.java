@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
+import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,9 +34,7 @@ public class DataSourceConfiguration {
     private String slave_url_2;
 
 
-    @Bean
-    public DruidDataSource dataSource() {
-        //Master
+    private DruidDataSource commonDataSource(String url){
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);
@@ -46,16 +44,28 @@ public class DataSourceConfiguration {
         dataSource.setMaxWait(Integer.parseInt(maxWait));
         dataSource.setValidationQuery("SELECT 1 FROM DUAL");
         dataSource.setTestOnBorrow(true);
+        return dataSource;
+    }
+
+    @Bean
+    public DataSource dataSource() {
         Map<Object, Object> targetDataSources = new HashMap<>();
         CloudRoutingDataSource cloudRoutingDataSource = new CloudRoutingDataSource();
-        cloudRoutingDataSource.setDefaultTargetDataSource(dataSource);
-        targetDataSources.put(DBTypeEnum.MASTER, dataSource);
-        dataSource.setUrl(slave_url_1);
-        targetDataSources.put(DBTypeEnum.SLAVE1, dataSource);
-        dataSource.setUrl(slave_url_2);
-        targetDataSources.put(DBTypeEnum.SLAVE2, dataSource);
+        cloudRoutingDataSource.setDefaultTargetDataSource(commonDataSource(url));
+        targetDataSources.put(DBTypeEnum.MASTER,commonDataSource(url));
+        targetDataSources.put(DBTypeEnum.SLAVE1,commonDataSource(slave_url_1));
+        targetDataSources.put(DBTypeEnum.SLAVE2,commonDataSource(slave_url_2));
         cloudRoutingDataSource.setTargetDataSources(targetDataSources);
-        return dataSource;
+
+        //初始化slave datasource
+//        try {
+//            commonDataSource(slave_url_1).init();
+//            commonDataSource(slave_url_2).init();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
+        return cloudRoutingDataSource;
     }
 
 }

@@ -16,10 +16,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 public class AuditApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context= SpringApplication.run(AuditApplication.class,args);
-        String[] beanNames=context.getBeanDefinitionNames();
-        for (String beanName:beanNames){
-            log.info(beanName);
-        }
+        SpringApplication.run(AuditApplication.class,args);
+//        ConfigurableApplicationContext context= SpringApplication.run(AuditApplication.class,args);
+//        String[] beanNames=context.getBeanDefinitionNames();
+//        for (String beanName:beanNames){
+//            log.info(beanName);
+//        }
     }
 }
