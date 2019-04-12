@@ -28,6 +28,10 @@ public class DataSourceConfiguration {
     private String maxActive;
     @Value("${jdbc.maxWait}")
     private String maxWait;
+    @Value("${jdbc.slave_1.url}")
+    private String slave_url_1;
+    @Value("${jdbc.slave_2.url}")
+    private String slave_url_2;
 
 
     @Bean
@@ -42,21 +46,14 @@ public class DataSourceConfiguration {
         dataSource.setMaxWait(Integer.parseInt(maxWait));
         dataSource.setValidationQuery("SELECT 1 FROM DUAL");
         dataSource.setTestOnBorrow(true);
-
-        //Salve
-        DruidDataSource salve_1 = dataSource;
-        String url_1 = "";
-        String url_2 = "";
-        salve_1.setUrl(url_1);
-        DruidDataSource salve_2 = dataSource;
-
-        salve_2.setUrl(url_2);
+        Map<Object, Object> targetDataSources = new HashMap<>();
         CloudRoutingDataSource cloudRoutingDataSource = new CloudRoutingDataSource();
         cloudRoutingDataSource.setDefaultTargetDataSource(dataSource);
-        Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DBTypeEnum.MASTER, dataSource);
-        targetDataSources.put(DBTypeEnum.SLAVE1, salve_1);
-        targetDataSources.put(DBTypeEnum.SLAVE2, salve_2);
+        dataSource.setUrl(slave_url_1);
+        targetDataSources.put(DBTypeEnum.SLAVE1, dataSource);
+        dataSource.setUrl(slave_url_2);
+        targetDataSources.put(DBTypeEnum.SLAVE2, dataSource);
         cloudRoutingDataSource.setTargetDataSources(targetDataSources);
         return dataSource;
     }
