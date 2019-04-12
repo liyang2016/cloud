@@ -1,10 +1,10 @@
 package com.leon.cloud.audit.config;
 
 public enum  DBTypeEnum {
-    MASTER(1,""),SLAVE1(2,""),SLAVE2(3,"");
+    MASTER,
 
-    DBTypeEnum(int index, String desc) {
+    SLAVE1,
 
-    }
+    SLAVE2
 
 }
