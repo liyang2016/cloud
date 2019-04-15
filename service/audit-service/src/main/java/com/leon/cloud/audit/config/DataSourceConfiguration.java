@@ -1,6 +1,7 @@
 package com.leon.cloud.audit.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.leon.cloud.common.db.CloudRoutingDataSource;
 import com.leon.cloud.common.db.DBTypeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package com.leon.cloud.audit.config;
+package com.leon.cloud.audit.aop;
 
 import lombok.extern.log4j.Log4j2;
 import org.aspectj.lang.ProceedingJoinPoint;
