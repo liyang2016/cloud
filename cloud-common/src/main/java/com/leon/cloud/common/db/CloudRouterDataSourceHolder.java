@@ -1,4 +1,4 @@
-package com.leon.cloud.audit.config;
+package com.leon.cloud.common.db;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -7,7 +7,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Log4j2
 public class CloudRouterDataSourceHolder {
 
+    /**
+     * 无锁实现
+     */
     private static final ThreadLocal<DBTypeEnum> dataSourceHolder = new ThreadLocal<>();
+    /**
+     * 多节点调度策略简单实现
+     */
     private static AtomicInteger count = new AtomicInteger(0);
 
     public static DBTypeEnum get() {

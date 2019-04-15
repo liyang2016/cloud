@@ -1,4 +1,4 @@
-package com.leon.cloud.audit.config;
+package com.leon.cloud.common.db;
 
 public enum  DBTypeEnum {
     MASTER,

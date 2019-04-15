@@ -13,8 +13,8 @@ netstat -altpn
 wc -l log.text
 wc -w log.text
 grep -C 5 'error' log.text
-grep -c 'error' log,text
-grep -o 'error' log,text|wc -l
+grep -c 'error' log.text
+grep -o 'error' log.text|wc -l
 #文件夹下文件个数
 ls -l|grep '^-'|wc -l
 #文件夹下文件夹个数 包括子文件夹

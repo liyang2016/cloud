@@ -2,6 +2,7 @@ package com.leon.cloud.common.uilts;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +14,16 @@ import java.util.concurrent.TimeUnit;
  * Created by leon on 2019/3/21.
  */
 
+@Log4j2
 public class CacheMap {
-    private static final Logger logger = LoggerFactory.getLogger(CacheMap.class);
+
     private static Cache<String, Object> cache;
 
     static {
         cache = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(24, TimeUnit.HOURS).initialCapacity(10)
                 .removalListener(notification -> {
-                    if (logger.isInfoEnabled()) {
-                        logger.info("{}->移除缓存{}:{}", notification.getCause(), notification.getKey(), notification.getValue());
+                    if (log.isInfoEnabled()) {
+                        log.info("{}->移除缓存{}:{}", notification.getCause(), notification.getKey(), notification.getValue());
                     }
                 }).build();
     }
@@ -68,5 +70,9 @@ public class CacheMap {
         if (keys != null && keys.size() > 0) {
             cache.invalidateAll(keys);
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 }

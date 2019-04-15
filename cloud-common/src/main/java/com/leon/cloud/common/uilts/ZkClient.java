@@ -1,5 +1,6 @@
 package com.leon.cloud.common.uilts;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 public class ZkClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ZkClient.class);
@@ -84,35 +86,35 @@ public class ZkClient {
 
     private static void createNode(CuratorFramework client, String path) throws Exception {
         Stat stat = client.checkExists().forPath(path);
-        System.out.println(stat);
+        log.info(stat);
         String forPath = client.create().creatingParentsIfNeeded().forPath(path, "create init !".getBytes());
-        System.out.println(forPath);
+        log.info(forPath);
     }
 
 
     private static void getDataNode(CuratorFramework client, String path) throws Exception {
         Stat stat = client.checkExists().forPath(path);
-        System.out.println(stat);
-        byte[] datas = client.getData().forPath(path);
-        System.out.println(new String(datas));
+        log.info(stat);
+        byte[] dates = client.getData().forPath(path);
+        log.info(dates);
     }
 
     private static void setDataNode(CuratorFramework client, String path, String message) throws Exception {
         Stat stat = client.checkExists().forPath(path);
-        System.out.println(stat);
+        log.info(stat);
         client.setData().forPath(path, message.getBytes());
     }
 
     private static void deleteDataNode(CuratorFramework client, String path) throws Exception {
         Stat stat = client.checkExists().forPath(path);
-        System.out.println("deleteNode : " + stat);
+        log.info("deleteNode : {}", stat);
         Void forPath = client.delete().deletingChildrenIfNeeded().forPath(path);
-        System.out.println(forPath);
+        log.info(forPath);
     }
 
     public static void main(String[] args) {
         try {
-            nodesList(getClient("127.0.0.1","esop","asiainfo$123"), "/dubbo/org.apache.dubbo.demo.DemoService/providers");
+            nodesList(getClient("127.0.0.1", "esop", "asiainfo$123"), "/dubbo/org.apache.dubbo.demo.DemoService");
         } catch (Exception e) {
             e.printStackTrace();
         }

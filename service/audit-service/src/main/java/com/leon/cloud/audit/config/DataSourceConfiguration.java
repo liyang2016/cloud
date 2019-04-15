@@ -1,6 +1,7 @@
 package com.leon.cloud.audit.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.leon.cloud.common.db.DBTypeEnum;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,7 +34,6 @@ public class DataSourceConfiguration {
     @Value("${jdbc.slave_2.url}")
     private String slave_url_2;
 
-
     private DruidDataSource commonDataSource(String url){
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setDriverClassName(driver);
@@ -57,14 +57,13 @@ public class DataSourceConfiguration {
         targetDataSources.put(DBTypeEnum.SLAVE2,commonDataSource(slave_url_2));
         cloudRoutingDataSource.setTargetDataSources(targetDataSources);
 
-        //初始化slave datasource
+        //初始化slave datasource 定义多个DataSource导致MyBatis自动配置类失效
 //        try {
 //            commonDataSource(slave_url_1).init();
 //            commonDataSource(slave_url_2).init();
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-
         return cloudRoutingDataSource;
     }
 
