@@ -1,4 +1,4 @@
-package com.leon.cloud.common.design.observer;
+package com.leon.cloud.common.design.observer.jdk;
 
 import java.util.Observable;
 import java.util.Observer;

@@ -5,6 +5,7 @@ import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.api.ACLProvider;
+import org.apache.curator.framework.imps.CuratorFrameworkState;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.data.ACL;
@@ -21,49 +22,61 @@ public class ZkClient {
 
     private static final Logger logger = LoggerFactory.getLogger(ZkClient.class);
 
+    private static CuratorFramework curatorFramework;
+
+    public static void setCuratorFramework(CuratorFramework curatorFramework) {
+        ZkClient.curatorFramework = curatorFramework;
+    }
+
     /**
      * 创建zk客户端
      *
      * @return
      */
     private static CuratorFramework getClient(String connection, String username, String password) {
-        //每秒尝试连接，重试最大次数3次，默认session超时时间为1分钟，connection超时时间为15秒
-        RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
-        String id = username + ":" + password;
-        String AUTH_SCHEME = "auth";
-        String DIGEST_SCHEME = "digest";
-        //权限控制
-        ACLProvider aclProvider = new ACLProvider() {
-            private List<ACL> acl;
+        if (curatorFramework != null && curatorFramework.getState().equals(CuratorFrameworkState.STARTED)) {
+            log.info("curatorFramework exists");
+            return curatorFramework;
+        } else {
+            //每秒尝试连接，重试最大次数3次，默认session超时时间为1分钟，connection超时时间为15秒
+            RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
+            String id = username + ":" + password;
+            String AUTH_SCHEME = "auth";
+            String DIGEST_SCHEME = "digest";
+            //权限控制
+            ACLProvider aclProvider = new ACLProvider() {
+                private List<ACL> acl;
 
-            @Override
-            public List<ACL> getDefaultAcl() {
-                if (acl == null) {
-                    ArrayList<ACL> acl = ZooDefs.Ids.CREATOR_ALL_ACL;
-                    acl.clear();
-                    acl.add(new ACL(ZooDefs.Perms.ALL, new Id(AUTH_SCHEME, id)));
-                    this.acl = acl;
+                @Override
+                public List<ACL> getDefaultAcl() {
+                    if (acl == null) {
+                        ArrayList<ACL> acl = ZooDefs.Ids.CREATOR_ALL_ACL;
+                        acl.clear();
+                        acl.add(new ACL(ZooDefs.Perms.ALL, new Id(AUTH_SCHEME, id)));
+                        this.acl = acl;
+                    }
+                    return acl;
                 }
-                return acl;
-            }
 
-            @Override
-            public List<ACL> getAclForPath(String path) {
-                return acl;
-            }
-        };
-        int connectionTimeoutMs = 5000;
-        String namespace = "";
+                @Override
+                public List<ACL> getAclForPath(String path) {
+                    return acl;
+                }
+            };
+            int connectionTimeoutMs = 5000;
+            String namespace = "";
 
-        CuratorFramework client = CuratorFrameworkFactory.builder().aclProvider(aclProvider).
-                authorization(DIGEST_SCHEME, id.getBytes()).
-                connectionTimeoutMs(connectionTimeoutMs).
-                connectString(connection).
-                namespace(namespace).
-                retryPolicy(retryPolicy).build();
-        client.start();
+            CuratorFramework client = CuratorFrameworkFactory.builder().aclProvider(aclProvider).
+                    authorization(DIGEST_SCHEME, id.getBytes()).
+                    connectionTimeoutMs(connectionTimeoutMs).
+                    connectString(connection).
+                    namespace(namespace).
+                    retryPolicy(retryPolicy).build();
+            client.start();
+            setCuratorFramework(client);
+            return client;
+        }
 
-        return client;
     }
 
     private static CuratorFramework getClient(String connection) {
@@ -119,4 +132,6 @@ public class ZkClient {
             e.printStackTrace();
         }
     }
+
+
 }

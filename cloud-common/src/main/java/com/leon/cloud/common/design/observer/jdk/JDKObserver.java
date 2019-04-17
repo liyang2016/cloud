@@ -1,4 +1,4 @@
-package com.leon.cloud.common.design.observer;
+package com.leon.cloud.common.design.observer.jdk;
 
 
 public class JDKObserver {
