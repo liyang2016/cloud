@@ -19,3 +19,29 @@ register=true
 release=
 side=provider
 timestamp=1554859620977
+
+### HashedWheelTimer
+客户端重连 心跳检测
+服务端 心跳检测
+```java
+public HeaderExchangeClient(Client client, boolean startTimer) {
+        Assert.notNull(client, "Client can't be null");
+        this.client = client;
+        this.channel = new HeaderExchangeChannel(client);
+
+        if (startTimer) {
+            URL url = client.getUrl();
+            startReconnectTask(url);
+            startHeartBeatTask(url);
+        }
+    }
+    
+ /**
+ * 获取通道最后读写时间，超时则关闭通道
+*/
+ public HeaderExchangeServer(Server server) {
+         Assert.notNull(server, "server == null");
+         this.server = server;
+         startIdleCheckTask(getUrl());
+     }
+```
