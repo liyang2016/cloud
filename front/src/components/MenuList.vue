@@ -1,10 +1,6 @@
 <template>
     <div class="menu">
-        <el-radio-group v-model="isCollapse" style="margin-bottom: 10px;">
-            <el-radio-button v-show="isCollapse" :label="false"><i class="el-icon-d-arrow-right"></i></el-radio-button>
-            <el-radio-button v-show="!isCollapse" :label="true"><i class="el-icon-d-arrow-left"></i></el-radio-button>
-        </el-radio-group>
-        <el-menu default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+        <el-menu default-active="1-4-1" class="menu-vertical-index" @open="handleOpen" @close="handleClose"
                  :collapse="isCollapse">
             <el-submenu index="1">
                 <template slot="title">
@@ -60,9 +56,9 @@ export default {
 </script>
 
 <style scoped>
-    .el-menu-vertical-demo:not(.el-menu--collapse)
+    .menu-vertical-index:not(.el-menu--collapse)
     {
         width: 200px;
-        min-height: 400px;
+        min-height: 900px;
     }
 </style>

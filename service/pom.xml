@@ -98,5 +98,6 @@
         <module>auth-service</module>
         <module>serial-service</module>
         <module>audit-service</module>
+        <module>batch-service</module>
     </modules>
 </project>

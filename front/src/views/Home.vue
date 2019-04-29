@@ -1,13 +1,13 @@
 <template>
   <div class="home">
       <el-container>
-        <el-aside>
-          <MenuList></MenuList>
-        </el-aside>
-        <el-main>
           <el-header>
               footer
           </el-header>
+        <el-main>
+            <el-aside>
+                <MenuList></MenuList>
+            </el-aside>
           <el-main>
               <router-view></router-view>
           </el-main>
