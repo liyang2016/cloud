@@ -33,6 +33,7 @@
 		<apache.commons.version>3.3.2</apache.commons.version>
 		<apache.curator.version>4.2.0</apache.curator.version>
 		<redisson.version>3.10.6</redisson.version>
+		<spring.version>5.0.7.RELEASE</spring.version>
 	</properties>
 
 	<dependencyManagement>
@@ -138,6 +139,12 @@
 				<groupId>org.redisson</groupId>
 				<artifactId>redisson-spring-boot-starter</artifactId>
 				<version>${redisson.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 		</dependencies>
 
