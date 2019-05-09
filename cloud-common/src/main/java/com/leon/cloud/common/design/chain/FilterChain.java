@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 @Log4j2
-public class FilterChain {
+class FilterChain {
 
     private List<Filter> filters = new ArrayList<>();
     private int pos = 0;
 
-    public void addFilter(Filter filter) {
+    void addFilter(Filter filter) {
         filters.add(filter);
     }
 
-    public void doFilter(Map request, Map response) {
+    void doFilter(Map request, Map response) {
         int index = this.pos++;
         if (index >= filters.size()) {
             log.info("request:{},response:{}", request, response.size());
