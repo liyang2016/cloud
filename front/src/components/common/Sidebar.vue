@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import bus from '../common/bus';
+    import bus from '../../utils/bus';
     export default {
         data() {
             return {
@@ -124,6 +124,10 @@
                             {
                                 index: '404',
                                 title: '404页面'
+                            },
+                            {
+                                index: 'userDetail',
+                                title: '个人信息'
                             }
                         ]
                     }

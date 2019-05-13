@@ -96,6 +96,11 @@ export default new Router({
                     path: '/403',
                     component: resolve => require(['../components/page/403.vue'], resolve),
                     meta: { title: '403' }
+                },
+                {
+                    path: '/userDetail',
+                    component: resolve =>require(['../components/page/UserDetail.vue'],resolve),
+                    meta: {title: '个人信息'}
                 }
             ]
         },

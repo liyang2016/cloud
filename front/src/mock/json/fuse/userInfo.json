@@ -1,0 +1,9 @@
+{
+  "result": "success",
+  "data": {
+    "userSn": "3785521",
+    "username": "ly",
+    "age": 25
+  },
+  "msg": ""
+}
