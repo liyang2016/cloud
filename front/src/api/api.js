@@ -1,4 +1,4 @@
-import axios from '../utils/axiosUtil'
+import axios from '../utils/axios'
 
 
 export function fetch(url, params) {

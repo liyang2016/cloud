@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
         if (navigator.userAgent.indexOf('MSIE') > -1 && to.path === '/editor') {
             Vue.prototype.$alert('vue-quill-editor组件不兼容IE10及以下浏览器，请使用更高版本的浏览器查看', '浏览器不兼容通知', {
                 confirmButtonText: '确定'
-            });
+            }).then();
         } else {
             next();
         }

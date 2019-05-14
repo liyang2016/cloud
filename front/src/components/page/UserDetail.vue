@@ -6,6 +6,7 @@
 
 <script>
     import {mapState} from 'vuex'
+
     export default {
         name: "UserDetail",
         computed: mapState({
@@ -13,7 +14,9 @@
         }),
         created() {
             //初始化加载用户信息
-            this.$store.dispatch('getUserInfo')
+            this.$store.dispatch('getUserInfo').then(res => {
+                console.log(res)
+            })
         }
     }
 </script>
