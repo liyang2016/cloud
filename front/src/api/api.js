@@ -1,4 +1,4 @@
-import axios from '../utils/axios'
+import axios from '../utils/http'
 
 
 export function fetch({url, params, method}) {
@@ -10,7 +10,7 @@ export function fetch({url, params, method}) {
         }).then(response => {
             resolve(response);
         }).catch((error) => {
-            console.log(error)
+            console.log(error);
             reject(error)
         })
 
