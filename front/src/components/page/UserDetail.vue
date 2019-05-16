@@ -24,12 +24,7 @@
                 console.log(error);
             });
 
-            this.$http.getUserInfo().then(res=>{
-               console.log(res.data);
-               this.userId=res.data.data.userSn;
-            },error=>{
-                console.log(error);
-            });
+
         }
     }
 </script>
