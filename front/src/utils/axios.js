@@ -1,7 +1,7 @@
 import axios from "axios";
 import {formatDateTime} from "./date";
 // axios 配置
-axios.defaults.timeout = 60000;
+axios.defaults.timeout = 10000;
 axios.defaults.withCredentials = true;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 //http request 拦截器

@@ -1,22 +1,35 @@
 <template>
     <div>
-        <span>{{userInfo}}</span>
+        <span>{{userId}}</span><br>
+        <span v-for="item in userInfo">
+            <span>{{item.name}}</span><br>
+        </span>
     </div>
 </template>
 
 <script>
-    import {mapState} from 'vuex'
-
     export default {
         name: "UserDetail",
-        computed: mapState({
-            userInfo: state => state.userStore.userInfo
-        }),
+        data() {
+            return {
+                userInfo: [],
+                userId: null
+            }
+        },
         created() {
-            //初始化加载用户信息
-            this.$store.dispatch('getUserInfo').then(res => {
-                console.log(res)
-            })
+            this.$http.apiAddress().then(res => {
+                console.log(res.data);
+                this.userInfo=res.data.list;
+            },error=>{
+                console.log(error);
+            });
+
+            this.$http.getUserInfo().then(res=>{
+               console.log(res.data);
+               this.userId=res.data.data.userSn;
+            },error=>{
+                console.log(error);
+            });
         }
     }
 </script>

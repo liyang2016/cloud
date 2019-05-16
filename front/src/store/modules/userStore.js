@@ -1,4 +1,3 @@
-import api from '../../api/api'
 import types from '../../utils/mutation-types'
 
 const state = {
@@ -6,15 +5,13 @@ const state = {
 };
 
 const getters = {
-    userInfo: (state, getters, rootState) => {
+    userInfo: (state) => {
         return state.userInfo
     }
 };
 
 const actions = {
-    getUserInfo({commit}) {
-        api.getUserInfo(userInfo => commit(types.SET_USER_VO, userInfo))
-    }
+
 };
 
 const mutations = {

@@ -12,6 +12,7 @@ import './utils/directives';
 import "babel-polyfill";
 import './mock/mock.js';
 import store from './store'
+import api from './api/index'
 
 Vue.config.productionTip = false
 Vue.use(VueI18n);
@@ -19,7 +20,7 @@ Vue.use(ElementUI, {
     size: 'small'
 });
 Vue.prototype.$axios = axios;
-
+Vue.prototype.$http = api;
 const i18n = new VueI18n({
     locale: 'zh',
     messages
