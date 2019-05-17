@@ -6,3 +6,15 @@
 
 # 部署
 采用docker-compose方式编排部署，使用[wait-for-it](https://github.com/vishnubob/wait-for-it)控制服务之前启动顺寻
+
+
+
+#front
+前台参照vue-system-manager构建，使用vue、element-ui
+
+```shell
+yarn install
+yarn build
+yarn serve
+
+```

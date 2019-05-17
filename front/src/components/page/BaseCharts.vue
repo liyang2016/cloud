@@ -89,10 +89,10 @@
 </script>
 
 <style scoped>
-.schart-box{
-    display: inline-block;
-    margin: 20px;
-}
+    .schart-box{
+        display: inline-block;
+        margin: 20px;
+    }
     .schart{
         width: 500px;
         height: 400px;

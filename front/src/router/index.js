@@ -98,8 +98,8 @@ export default new Router({
                     meta: { title: '403' }
                 },
                 {
-                    path: '/userDetail',
-                    component: resolve =>require(['../components/page/UserDetail.vue'],resolve),
+                    path: '/task',
+                    component: resolve =>require(['../components/page/Task.vue'],resolve),
                     meta: {title: '个人信息'}
                 }
             ]

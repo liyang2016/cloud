@@ -126,7 +126,7 @@
                                 title: '404页面'
                             },
                             {
-                                index: 'userDetail',
+                                index: 'task',
                                 title: '个人信息'
                             }
                         ]

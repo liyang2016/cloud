@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: "UserDetail",
+        name: "Task",
         data() {
             return {
                 userInfo: [],

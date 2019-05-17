@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
  * Job
  *
  * DisallowConcurrentExecution可以保证任务无法并行执行，见StatefulJob类
+ *
+ * 任务不立即执行，在当前任务执行完成后执行
  */
 @Log4j2
 @PersistJobDataAfterExecution
