@@ -127,7 +127,7 @@
                             },
                             {
                                 index: 'task',
-                                title: '个人信息'
+                                title: '任务列表'
                             }
                         ]
                     }

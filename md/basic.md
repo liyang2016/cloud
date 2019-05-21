@@ -118,6 +118,11 @@ JDK中使用AbstractQueuedSynchronizer的有CountDownLatch、ReentrantLock、Ree
 
 
 
+##Java异常
+![exception](./img/exception.png)
+错误：
+检查性异常：
+运行时异常：由于程序编写错误造成，可以进行捕获也可以不捕获 
 
 
 

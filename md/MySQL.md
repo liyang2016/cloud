@@ -15,3 +15,10 @@ MySQL Server层记录的日志，记录所有更新且提交了数据或者已�
 update person set age = 30 where id = 1;
 a. 分配事务ID，获取锁，没有获取锁则等待。
 b. 执行器先通过存储引擎找到id = 1的数据也
+
+
+###read_only属性
+show variables like '%read_only%';
+set global read_only=1;   ---设置read_only属性为ON 0则为OFF
+flush tables with read lock;   ---提交所有的锁操作
+当read_only属性为ON时，非super用户执行DML语句时，会报异常

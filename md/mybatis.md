@@ -467,3 +467,12 @@ private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Obj
   }
 ```
 #### 7. 缓存
+
+
+
+
+
+
+
+
+

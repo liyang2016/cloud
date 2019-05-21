@@ -99,8 +99,8 @@ export default new Router({
                 },
                 {
                     path: '/task',
-                    component: resolve =>require(['../components/page/Task.vue'],resolve),
-                    meta: {title: '个人信息'}
+                    component: resolve =>require(['../components/page/cloud/Task.vue'],resolve),
+                    meta: {title: '任务列表'}
                 }
             ]
         },

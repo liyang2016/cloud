@@ -6,6 +6,9 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+/**
+ * 切面
+ */
 @Aspect
 @Component
 public class DataSourceAop {
@@ -25,6 +28,7 @@ public class DataSourceAop {
 
     }
 
+    //通知
     @Before("readPointcut()")
     public void read() {
         CloudRouterDataSourceHolder.slave();
