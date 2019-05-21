@@ -467,11 +467,167 @@ private void handleResultSet(ResultSetWrapper rsw, ResultMap resultMap, List<Obj
   }
 ```
 #### 7. 缓存
+Mybatis默认执行器为SimpleExecutor
+使用基本的PerpetualCache作为缓存管理器
+```java
+@Override
+public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
+ErrorContext.instance().resource(ms.getResource()).activity("executing a query").object(ms.getId());
+if (closed) {
+  throw new ExecutorException("Executor was closed.");
+}
+if (queryStack == 0 && ms.isFlushCacheRequired()) {
+  clearLocalCache();
+}
+List<E> list;
+try {
+  queryStack++;
+  //查询一级缓存是否存在 session级别的cache
+  list = resultHandler == null ? (List<E>) localCache.getObject(key) : null;
+  if (list != null) {
+    handleLocallyCachedOutputParameters(ms, key, parameter, boundSql);
+  } else {
+    //不存在
+    list = queryFromDatabase(ms, parameter, rowBounds, resultHandler, key, boundSql);
+  }
+} finally {
+  queryStack--;
+}
+if (queryStack == 0) {
+  for (DeferredLoad deferredLoad : deferredLoads) {
+    deferredLoad.load();
+  }
+  // issue #601
+  deferredLoads.clear();
+  //一级缓存为STATEMENT级别时，同一SqlSession的不同调用也不会共享数据，一次查询后清楚缓存
+  if (configuration.getLocalCacheScope() == LocalCacheScope.STATEMENT) {
+    // issue #482
+    clearLocalCache();
+  }
+}
+return list;
+}
 
+private <E> List<E> queryFromDatabase(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql) throws SQLException {
+List<E> list;
+//添加缓存到本地
+localCache.putObject(key, EXECUTION_PLACEHOLDER);
+try {
+  list = doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
+} finally {
+  localCache.removeObject(key);
+}
+localCache.putObject(key, list);
+if (ms.getStatementType() == StatementType.CALLABLE) {
+  localOutputParameterCache.putObject(key, parameter);
+}
+return list;
+}
+```
 
+Mybatis可以通过配置添加CachingExecutor，二级缓存
+使用TransactionalCache作为缓存管理器，保证SqlSession内缓存的事务；包含一个delegate为默认的SimpleExecutor
+```java
+@Override
+  public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
+      throws SQLException {
+    Cache cache = ms.getCache();
+    if (cache != null) {
+      flushCacheIfRequired(ms);
+      if (ms.isUseCache() && resultHandler == null) {
+        ensureNoOutParams(ms, boundSql);
+        @SuppressWarnings("unchecked")
+        List<E> list = (List<E>) tcm.getObject(cache, key);
+        if (list == null) {
+          list = delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+          tcm.putObject(cache, key, list); // issue #578 and #116
+        }
+        return list;
+      }
+    }
+    return delegate.query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+  }
+```
 
+缓存范围
+1. 一级缓存
+```xml
+<settings>
+   <setting name="localCacheScope" value="STATEMENT"></setting>
+</settings>
+```
+范围选项是SESSION和STATEMENT
+SESSION级别：缓存一个SqlSession内的所有查询
+STATEMENT级别：同一SqlSession的不同调用也不会共享数据，一次查询后清楚缓存，只有在BatchExecutor注册时有效
 
+2. 二级缓存
+```java
+public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
+    executorType = executorType == null ? defaultExecutorType : executorType;
+    executorType = executorType == null ? ExecutorType.SIMPLE : executorType;
+    Executor executor;
+    if (ExecutorType.BATCH == executorType) {
+      executor = new BatchExecutor(this, transaction);
+    } else if (ExecutorType.REUSE == executorType) {
+      executor = new ReuseExecutor(this, transaction);
+    } else {
+      executor = new SimpleExecutor(this, transaction);
+    }
+    //全局缓存开启，添加CachingExecutor执行器，传入ExecutorType.SIMPLE
+    if (cacheEnabled) {
+      executor = new CachingExecutor(executor);
+    }
+    executor = (Executor) interceptorChain.pluginAll(executor);
+    return executor;
+  }
+```
+```xml
+<!-->全局配置 mybatis-config.xml<-->
+<settings>
+    <setting name="cacheEnabled" value="true"></setting>
+</settings>
 
+<!-->mapper中配置<-->
+<xs:element name="mapper">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <!-->引用其他namespace的Cache<-->
+        <xs:element ref="cache-ref"/>
+        <!-->在namespace级别下使用cache<-->
+        <xs:element ref="cache"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="resultMap"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameterMap"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="sql"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="insert"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="update"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="delete"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="select"/>
+      </xs:choice>
+      <xs:attribute name="namespace"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cache-ref">
+    <xs:complexType>
+      <xs:attribute name="namespace" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="cache">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="property"/>
+      </xs:sequence>
+      <xs:attribute name="type"/>
+      <xs:attribute name="eviction"/>
+      <xs:attribute name="flushInterval"/>
+      <xs:attribute name="size"/>
+      <xs:attribute name="readOnly"/>
+      <xs:attribute name="blocking"/>
+    </xs:complexType>
+  </xs:element>
+  
+ <!-->在Mapper的select节点下配置useCache属性<-->
+ 
+```
 
 
 
