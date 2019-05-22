@@ -55,7 +55,7 @@ public static ExecutorService newCachedThreadPool() {
 
 /**
 * 调度线程池
-* 初始化线程池个数为1 最大线程池线程数都为Integer.MAX_VALUE
+* 初始化线程池个数为corePoolSize 最大线程池线程数都为Integer.MAX_VALUE
 * 线程失效时间为0
 * 线程等待队列为延迟队列
 */
@@ -110,7 +110,7 @@ public EagerThreadPoolExecutor(int corePoolSize,
 ```
 JDK中使用AbstractQueuedSynchronizer的有CountDownLatch、ReentrantLock、ReentrantReadWriteLock、Semaphore、ThreadPoolExecutor
 ### CountDownLatch
-
+> A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
 
 
 ## 类加载

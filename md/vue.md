@@ -49,6 +49,5 @@ npm ls -g
 v-bind用于绑定属性，简写 :class  
 v-on用于绑定事件，简写：@bind  
 v-model实现表单输入和应用状态之间的双向绑定  
-v-model 指令在表单元素上创建双向数据绑定
 #### 数据传递
-
+store组件 vuex
