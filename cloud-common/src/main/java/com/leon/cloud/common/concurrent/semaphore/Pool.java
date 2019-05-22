@@ -2,21 +2,21 @@ package com.leon.cloud.common.concurrent.semaphore;
 
 import java.util.concurrent.Semaphore;
 
-public class Pool {
+class Pool {
 
-    Pool(Object[] items){
-        this.items=items;
+    Pool(Object[] items) {
+        this.items = items;
     }
 
     private static final int MAX_AVAILABLE = 10;
     private final Semaphore available = new Semaphore(MAX_AVAILABLE, true);
 
-    public Object getItem() throws InterruptedException {
+    Object getItem() throws InterruptedException {
         available.acquire();
         return getNextAvailableItem();
     }
 
-    public void putItem(Object x) {
+    void putItem(Object x) {
         if (markAsUnused(x))
             available.release();
     }
@@ -34,7 +34,7 @@ public class Pool {
         return null; // not reached
     }
 
-    protected synchronized boolean markAsUnused(Object item) {
+    private synchronized boolean markAsUnused(Object item) {
         for (int i = 0; i < MAX_AVAILABLE; ++i) {
             if (item == items[i]) {
                 if (used[i]) {
