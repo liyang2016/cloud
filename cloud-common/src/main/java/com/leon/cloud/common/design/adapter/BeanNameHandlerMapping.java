@@ -16,4 +16,12 @@ public class BeanNameHandlerMapping {
         }
         return null;
     }
+
+
+    public static void main(String[] args) {
+        HandlerAdapter adapter = new BeanNameHandlerAdapter();
+        BeanNameHandlerMapping handlerMapping = new BeanNameHandlerMapping();
+        Object handler = handlerMapping.getHandler();
+        System.out.println(adapter.handler(handler));
+    }
 }
