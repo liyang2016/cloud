@@ -111,8 +111,13 @@ public EagerThreadPoolExecutor(int corePoolSize,
 JDK中使用AbstractQueuedSynchronizer的有CountDownLatch、ReentrantLock、ReentrantReadWriteLock、Semaphore、ThreadPoolExecutor
 ### CountDownLatch
 > A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes.
+### CyclicBarrier
+使用ReentrantLock实现
 
 
+### ReentrantLock
+那如何能保证每个线程都能拿到锁呢，队列FIFO是一个完美的解决方案，也就是先进先出，java的ReenTrantLock也就是用队列实现的公平锁和非公平锁。
+在公平的锁中，如果有另一个线程持有锁或者有其他线程在等待队列中等待这个所，那么新发出的请求的线程将被放入到队列中。而非公平锁上，只有当锁被某个线程持有时，新发出请求的线程才会被放入队列中（此时和公平锁是一样的）。所以，它们的差别在于非公平锁会有更多的机会去抢占锁。
 ## 类加载
 
 

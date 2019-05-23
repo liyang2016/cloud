@@ -10,7 +10,7 @@ public class CyclicBarrierExample {
 
         for (int i = 0; i < 12; i++) {
             TimeUnit.SECONDS.sleep(2);
-            new Thread(new Work(cyclicBarrier,i)).start();
+            new Thread(new Work(cyclicBarrier, i)).start();
         }
 
     }
