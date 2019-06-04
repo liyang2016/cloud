@@ -1,6 +1,6 @@
 package com.leon.cloud.common.uilts.algorithm;
 
-import com.pyjaor.common.utils.ArraysUtils;
+import com.leon.cloud.common.uilts.ArraysUtils;
 
 /**
  * Created by leon on 2018/9/7.
