@@ -16,7 +16,7 @@ public class ScheduleHandle {
     private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 //    @Scheduled(fixedDelay = 3 * 1000)
-//    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/5 * * * * ?")
 //    @Scheduled(fixedRate = 3 * 1000)
     public void scheduled() {
         int i = atomicInteger.get();
