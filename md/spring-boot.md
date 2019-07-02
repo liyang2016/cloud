@@ -188,3 +188,9 @@ public <T> T execute(TransactionCallback<T> action) throws TransactionException 
 
 
 
+> spring-boot四大神器starters、auto-configuration、cli、actuator
+
+## starter
+
+
+
