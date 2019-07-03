@@ -34,6 +34,7 @@
 		<apache.curator.version>4.2.0</apache.curator.version>
 		<redisson.version>3.10.6</redisson.version>
 		<spring.version>5.0.7.RELEASE</spring.version>
+		<apache.commons.pool.version>2.6.2</apache.commons.pool.version>
 	</properties>
 
 	<dependencyManagement>
@@ -145,6 +146,12 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-pool2</artifactId>
+				<version>${apache.commons.pool.version}</version>
 			</dependency>
 		</dependencies>
 
