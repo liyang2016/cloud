@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.leon</groupId>
-            <artifactId>cloud-common</artifactId>
+            <artifactId>common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <!--<dependency>-->
