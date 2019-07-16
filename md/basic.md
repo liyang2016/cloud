@@ -140,3 +140,5 @@ JDK中使用AbstractQueuedSynchronizer的有CountDownLatch、ReentrantLock、Ree
 领域模型的语义可以被用在源代码中，因此领域模型可以被应用在底层的软件开发阶段中。实体可以演化为类，方法和属性可以直接演化至代码之中。
 在UML中，类图被用来描述领域模型。  
 类之间的关系有继承（泛化：继承的逆过程）、关联、组合、聚合
+
+
