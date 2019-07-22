@@ -141,4 +141,3 @@ JDK中使用AbstractQueuedSynchronizer的有CountDownLatch、ReentrantLock、Ree
 在UML中，类图被用来描述领域模型。  
 类之间的关系有继承（泛化：继承的逆过程）、关联、组合、聚合
 
-
