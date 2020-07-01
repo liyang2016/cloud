@@ -29,7 +29,7 @@
 		<joda.time.version>2.9.9</joda.time.version>
 		<guava.veriosn>27.0.1-jre</guava.veriosn>
 		<mybatis.starter.version>2.0.0</mybatis.starter.version>
-		<quartz.version>2.3.0</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<apache.commons.version>3.3.2</apache.commons.version>
 		<apache.curator.version>4.2.0</apache.curator.version>
 		<redisson.version>3.10.6</redisson.version>
